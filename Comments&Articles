@@ -1,0 +1,269 @@
+Design a table structure for following conditions:
+A user can write many articles. Each written article will fall under one category. Remember that many articles can be written under same category.
+The users can be of two types viz. admin or normal. A user can post multiple comments on an article.
+Now write queries for:
+
+1) manage(create, update, delete) categories, articles, comments, and users
+-- CREATE TABLE ARTICLES-------------------------------
+
+create table articles(
+id int not null auto_increment,
+title text,
+author_name text,
+category_id int not null,
+primary key(id),
+foreign key(category_id) references categories(id)
+);
+insert into articles(title, category_id, author_name) values('Climate', 1, 'user1');
+insert into articles(title, category_id, author_name) values('Roadways', 2 , 'user2');
+insert into articles(title, category_id, author_name) values('Plantation', 3 , 'user3');
+insert into articles(title, category_id, author_name) values('GDP', 4 ,'admin');
+insert into articles(title, category_id, author_name) values('Warehouse', 5, 'user4');
+insert into articles(title, category_id, author_name) values('Green bonds',8, 'user4');
+insert into articles(title, category_id, author_name) values('Panaroma',7, 'user3');
+insert into articles(title, category_id, author_name) values('5-G Technology',6, 'user2');
+insert into articles(title, category_id, author_name) values('Smart City',3, 'admin');
+
+mysql> select * from articles;
++----+----------------+-------------+-------------+
+| id | title          | author_name | category_id |
++----+----------------+-------------+-------------+
+|  1 | Climate        | user1       |           1 |
+|  2 | Roadways       | user2       |           2 |
+|  3 | Plantation     | user3       |           3 |
+|  4 | GDP            | admin       |           4 |
+|  5 | Warehouse      | user4       |           5 |
+|  6 | Green bonds    | user4       |           8 |
+|  7 | Panaroma       | user3       |           7 |
+|  8 | 5-G Technology | user2       |           6 |
+|  9 | Smart City     | admin       |           3 |
++----+----------------+-------------+-------------+
+9 rows in set (0.00 sec)
+
+-- CREATE TABLE USER--------------------------
+
+create table user(
+id int not null auto_increment,
+name text,
+primary key(id));
+insert into user(name) values('user1');
+insert into user(name) values('user2');
+insert into user(name) values('user3');
+insert into user(name) values('user4');
+insert into user(name) values('admin');
+
+
+mysql> select * from user;
++----+-------+
+| id | name  |
++----+-------+
+|  1 | user1 |
+|  2 | user2 |
+|  3 | user3 |
+|  4 | user4 |
+|  5 | admin |
++----+-------+
+5 rows in set (0.01 sec)
+
+-- CREATE TABLE CATEGORIES----------------
+
+create table categories(
+id int not null auto_increment,
+name varchar(30),
+primary key(id));
+insert into categories(name) values('category 1');
+insert into categories(name) values('category 2');
+insert into categories(name) values('category 3');
+insert into categories(name) values('category 4');
+insert into categories(name) values('category 5');
+insert into categories(name) values('category 6');
+insert into categories(name) values('category 7');
+insert into categories(name) values('category 8');
+insert into categories(name) values('category 9');
+
+mysql> select * from categories;
++----+------------+
+| id | name       |
++----+------------+
+|  1 | category 1 |
+|  2 | category 2 |
+|  3 | category 3 |
+|  4 | category 4 |
+|  5 | category 5 |
+|  6 | category 6 |
+|  7 | category 7 |
+|  8 | category 8 |
+|  9 | category 9 |
++----+------------+
+9 rows in set (0.00 sec)
+
+-- CREATE TABLE COMMENTS-------------------
+
+create table comments(
+id int not null auto_increment,
+title text,
+article_id int,
+primary key(id),
+foreign key(article_id) references articles(id)
+);
+insert into comments(title, article_id) values('comment_title 1', 2);
+insert into comments(title, article_id)  values('comment_title 4', 3);
+insert into comments(title, article_id) values('comment_title 3', 4);
+insert into comments(title, article_id) values('comment_title 2', 5);
+insert into comments(title, article_id) values('comment_title 5', 1);
+insert into comments(title, article_id) values('', 6);
+insert into comments(title, article_id) values('', 7);
+insert into comments(title, article_id) values('', 8);
+insert into comments(title, article_id) values('comment_title 7', 7);
+insert into comments(title, article_id) values('comment_title 8', 5);
+
+
+mysql> select * from comments;
++----+-----------------+------------+
+| id | title           | article_id |
++----+-----------------+------------+
+|  1 | comment_title 1 |          2 |
+|  2 | comment_title 4 |          3 |
+|  3 | comment_title 3 |          4 |
+|  4 | comment_title 2 |          5 |
+|  5 | comment_title 5 |          1 |
+|  6 |                 |          6 |
+|  7 |                 |          7 |
+|  8 |                 |          8 |
+|  9 | comment_title 7 |          7 |
+| 10 | comment_title 8 |          5 |
++----+-----------------+------------+
+10 rows in set (0.00 sec)
+
+2) select all articles whose author's name is user3 (Do this exercise using variable also).
+
+2.1) WITHOUT VARIABLE
+mysql> select title as articlename from articles where author_name = 'user3';
++-------------+
+| articlename |
++-------------+
+| Plantation  |
+| Panaroma    |
++-------------+
+2 rows in set (0.00 sec)
+
+2.2) USING VARIABLE
+
+mysql> select @var1:=title from articles where author_name = 'user3';
++--------------+
+| @var1:=title |
++--------------+
+| Plantation   |
+| Panaroma     |
++--------------+
+2 rows in set, 1 warning (0.00 sec)
+
+
+3) For all the articles being selected above, select all the articles and also the comments associated with those articles in a single query (Do this using subquery also)
+
+3.1) USING A NESTED QUERY
+
+mysql> select a.title as article_title, c.title as comments_title from articles as a, comments as c
+    -> where a.id in (select c.article_id from comments);
++----------------+-----------------+
+| article_title  | comments_title  |
++----------------+-----------------+
+| Roadways       | comment_title 1 |
+| Plantation     | comment_title 4 |
+| GDP            | comment_title 3 |
+| Warehouse      | comment_title 2 |
+| Climate        | comment_title 5 |
+| Green bonds    |                 |
+| Panaroma       |                 |
+| 5-G Technology |                 |
+| Panaroma       | comment_title 7 |
+| Warehouse      | comment_title 8 |
++----------------+-----------------+
+10 rows in set (0.00 sec)
+
+3.2) WITHOUT A NESTED QUERY
+
+
+mysql> select a.title as article_title, c.title as comments_title from articles as a
+    -> join comments as c on a.id = c.article_id;
++----------------+-----------------+
+| article_title  | comments_title  |
++----------------+-----------------+
+| Roadways       | comment_title 1 |
+| Plantation     | comment_title 4 |
+| GDP            | comment_title 3 |
+| Warehouse      | comment_title 2 |
+| Climate        | comment_title 5 |
+| Green bonds    |                 |
+| Panaroma       |                 |
+| 5-G Technology |                 |
+| Panaroma       | comment_title 7 |
+| Warehouse      | comment_title 8 |
++----------------+-----------------+
+10 rows in set (0.00 sec)
+
+4 Write a query to select all articles which do not have any comments (Do using subquery also)
+
+4.1)  USING A NESTED QUERY
+
+mysql> select a.title as article_title, c.title as comments_title from articles as a, comments as c
+    -> where a.id in (select c.article_id from comments where c.title = '');
++----------------+----------------+
+| article_title  | comments_title |
++----------------+----------------+
+| Green bonds    |                |
+| Panaroma       |                |
+| 5-G Technology |                |
++----------------+----------------+
+3 rows in set (0.00 sec)
+
+4.2)  WITHOUT A NESTED QUERY
+
+mysql> select a.title, c.title as comments_title from articles as a
+    -> Join comments as c on (c.article_id = a.id AND c.title = '');
++----------------+----------------+
+| title          | comments_title |
++----------------+----------------+
+| Green bonds    |                |
+| Panaroma       |                |
+| 5-G Technology |                |
++----------------+----------------+
+3 rows in set (0.00 sec)
+
+5 Write a query to select article which has maximum comments
+
+
+mysql> select a.author_name, a.title, count(c.id) as commentCount from articles as a
+    -> Left join comments as c on a.id = c.article_id
+    -> group by a.author_name order by commentCount desc limit 2;
++-------------+------------+--------------+
+| author_name | title      | commentCount |
++-------------+------------+--------------+
+| user3       | Plantation |            3 |
+| user4       | Warehouse  |            3 |
++-------------+------------+--------------+
+2 rows in set (0.00 sec)
+
+
+6 Write a query to select article which does not have more than one comment by the same user ( do this using left join and group by )
+
+
+mysql> select a.author_name, a.title, count(c.id) = 1 as commentCount from articles as a
+    -> left join comments as c on a.id = c.article_id
+    -> group by a.author_name
+    -> order by a.title limit 2;
++-------------+---------+--------------+
+| author_name | title   | commentCount |
++-------------+---------+--------------+
+| user1       | Climate |            1 |
+| admin       | GDP     |            1 |
++-------------+---------+--------------+
+2 rows in set (0.00 sec)
+
+-------------------------------------------------------------END-----------------------------------------------------------------------
+
+
+
+
+
+
