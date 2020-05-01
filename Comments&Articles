@@ -35,18 +35,21 @@ join user as u on u.id = a.user_id && u.name = 'user3';
 2.2) USING VARIABLE
 
 
-select @var1:= title as article_name from articles as a 
+select @var1:= group_concat(title) from articles as a 
 join user as u on u.id = a.user_id && u.name = 'user3'; 
 
-+----------------+
-| article_name   |
-+----------------+
-| Plantation     |
-| Panaroma       |
-| 5-G Technology |
-+----------------+
 
++---------------------------------+
+@var1:= group_concat(title)
+Plantation,Panaroma,5-G Technology
++---------------------------------+
 
+select @var1;
+
++---------------------------------+
+@var1
+Plantation,Panaroma,5-G Technology
++---------------------------------+
 
 Q3) For all the articles being selected above, select all the articles and also the comments associated with those articles in a single query (Do this using subquery also)
 
