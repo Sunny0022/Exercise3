@@ -9,7 +9,7 @@ Q1) manage(create, update, delete) categories, articles, comments, and users
 
 
 
-DUMPArticleBio.sql
+DUMPbookbio.sql
 
 
 
@@ -19,37 +19,30 @@ Q2) select all articles whose author's name is user3 (Do this exercise using var
 
 2.1) WITHOUT VARIABLE
 
+Select a.article_title as article_name, u.author_name from articles as a 
+join user as u on u.id = a.user_id && u.author_name = 'user3'; 
 
-Select a.title as article_name from articles as a 
-join user as u on u.id = a.user_id && u.name = 'user3'; 
-
-+----------------+
-| article_name   |
-+----------------+
-| Plantation     |
-| Panaroma       |
-| 5-G Technology |
-+----------------+
++--------------------------+
+article_name	author_name
+Plantation	user3
+Panaroma	user3
+5-G Technology	user3
++--------------------------+
 
 
 2.2) USING VARIABLE
 
+set @var1 = 'user3';
+Select a.article_title as article_name, u.author_name from articles as a 
+join user as u on u.id = a.user_id && u.author_name = @var1;
 
-select @var1:= group_concat(title) from articles as a 
-join user as u on u.id = a.user_id && u.name = 'user3'; 
 
-
-+---------------------------------+
-@var1:= group_concat(title)
-Plantation,Panaroma,5-G Technology
-+---------------------------------+
-
-select @var1;
-
-+---------------------------------+
-@var1
-Plantation,Panaroma,5-G Technology
-+---------------------------------+
++--------------------------+
+article_name	author_name
+Plantation	user3
+Panaroma	user3
+5-G Technology	user3
++--------------------------+
 
 Q3) For all the articles being selected above, select all the articles and also the comments associated with those articles in a single query (Do this using subquery also)
 
@@ -103,66 +96,66 @@ Q4 Write a query to select all articles which do not have any comments (Do using
 
 4.1)  USING A NESTED QUERY
 
-select a.title as article_title, c.title as comments_title from articles as a, comments as c
-where a.id in (select c.article_id from comments where c.title = '');
+statement missing
+
 
 +----------------+----------------+
 | article_title  | comments_title |
 +----------------+----------------+
-| Green bonds    |                |
-| Panaroma       |                |
-| 5-G Technology |                |
+| GDP            |       Null     |
+| Smart City     |       Null     |
 +----------------+----------------+
 
 4.2)  WITHOUT A NESTED QUERY
 
-select a.title, c.title as comments_title from articles as a
-Join comments as c on (c.article_id = a.id AND c.title = '');
+select a.article_title, c.comment_title from articles as a
+left Join comments as c on c.article_id = a.id
+order by c.article_id limit 2  ;
 
 +----------------+----------------+
-| title          | comments_title |
+| article_title  | comments_title |
 +----------------+----------------+
-| Green bonds    |                |
-| Panaroma       |                |
-| 5-G Technology |                |
-+----------------+----------------+
+| GDP            |       Null     |
+| Smart City     |       Null     |
++----------------+------------
 
 
 5 Write a query to select article which has maximum comments
 
 
-select u.name, u.type, a.title, count(c.id) as commentCount from articles as a
-join user as u on u.id = a.user_id
-Left join comments as c on a.id = c.article_id
+select u.author_name, u.type, a.article_title, count(c.id) as commentCount from articles as a
+left join user as u on u.id = a.user_id
+left join comments as c on a.id = c.article_id
 group by a.id 
-order by commentCount desc limit 2;
+order by commentCount desc limit 3;
 
-+-------------+------------+------+
-name	type	title	commentCount
-user3	user	Panaroma	2
-user6	user	Warehouse	2
-+-------------+------------+------+
+
++-------------+------------+------------------------+
+author_name	type	article_title	commentCount
+user3	        user	Panaroma	 2
+user3	        user	5-G Technology	 2
+user5           admin   Warehouse        2
++-------------+------------+------------------------+
 
 6 Write a query to select article which does not have more than one comment by the same user ( do this using left join and group by )
 
-
-select u.name, u.type, a.title, count(c.id) = 1 as commentCount from articles as a
+select u.author_name, a.article_title, count(c.id) = 1 as commentCount from articles as a
 join user as u on u.id = a.user_id
 left join comments as c on a.id = c.article_id
 group by a.id
-order by a.title;
+order by commentCount desc;
 
-+-------------+------------+------+
-name	type	title	   commentCount
-user3	user	5-G Technology	1
-user1	user	Climate	        1
-user4	user	GDP	        1
-user7	admin	Green bonds	1
-user3	user	Panaroma	0
-user3	user	Plantation	1
-user2	user	Roadways	0
-user1	user	Smart City	0
-user6	admin	Warehouse	1
-+-------------+------------+------+
 
++-------------+------------+--------------+
+author_name	article_title	commentCount
+user1	          Climate	      1
+user6	          Green bonds	      1  
+user2	          Roadways	      1
+user3 	          Plantation	      1
+user1	          Smart City	      0
+user3	          Panaroma	      0
+user3	          5-G Technology      0
+user4	          GDP	              0
+user5	          Warehouse	      0
++-------------+------------+--------------+
 -------------------------------------------------------------END-----------------------------------------------------------------------
