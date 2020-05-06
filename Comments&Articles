@@ -8,8 +8,8 @@ Now write queries for:
 Q1) manage(create, update, delete) categories, articles, comments, and users
 
 
-
-DUMPbiography.sql
+Structure : Create_Tables file
+DUMP  :  DUMPbiography.sql
 
 
 
