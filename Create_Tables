@@ -1,0 +1,134 @@
+----------------CREATE TABLE USER-------------------------------------------
+
+create table user(
+id smallint not null auto_increment,
+author_name text not null,
+type text not null,
+primary key(id));
+insert into user(author_name, type) values('user1', 'user');
+insert into user(author_name, type) values('user2', 'user');
+insert into user(author_name, type) values('user3', 'user');
+insert into user(author_name, type) values('user4', 'user');
+insert into user(author_name, type) values('user5', 'admin');
+insert into user(author_name, type) values('user6', 'user');
+insert into user(author_name, type) values('user7', 'admin');
+insert into user(author_name, type) values('user8', 'user');
+select * from user;
+
++----+-------------+-------+
+| id | author_name | type  |
++----+-------------+-------+
+|  1 | user1       | user  |
+|  2 | user2       | user  |
+|  3 | user3       | user  |
+|  4 | user4       | user  |
+|  5 | user5       | admin |
+|  6 | user6       | user  |
+|  7 | user7       | admin |
+|  8 | user8       | user  |
++----+-------------+-------+
+
+----------------CREATE TABLE CATEGORIES-------------------------------------------
+create table categories(
+id smallint not null auto_increment,
+name varchar(30) not null,
+primary key(id));
+insert into categories(name) values('category 1');
+insert into categories(name) values('category 2');
+insert into categories(name) values('category 3');
+insert into categories(name) values('category 4');
+insert into categories(name) values('category 5');
+insert into categories(name) values('category 6');
+insert into categories(name) values('category 7');
+insert into categories(name) values('category 8');
+insert into categories(name) values('category 9');
+
+select * from categories;
+
++----+------------+
+| id | name       |
++----+------------+
+|  1 | category 1 |
+|  2 | category 2 |
+|  3 | category 3 |
+|  4 | category 4 |
+|  5 | category 5 |
+|  6 | category 6 |
+|  7 | category 7 |
+|  8 | category 8 |
+|  9 | category 9 |
++----+------------+
+
+----------------CREATE TABLE ARTICLES-------------------------------------------
+
+create table articles(
+id smallint not null auto_increment,
+article_title text not null,
+user_id smallint not null,
+category_id smallint not null,
+primary key(id),
+foreign key(user_id) references user(id),
+foreign key(category_id) references categories(id)
+);
+insert into articles(article_title, user_id, category_id) values('Climate', 1, 1);
+insert into articles(article_title, user_id, category_id) values('Roadways', 2 , 2);
+insert into articles(article_title, user_id, category_id) values('Plantation', 3 ,9);
+insert into articles(article_title, user_id, category_id) values('GDP', 4 , 7);
+insert into articles(article_title, user_id, category_id) values('Warehouse', 5, 7);
+insert into articles(article_title, user_id, category_id) values('Green bonds',6, 3);
+insert into articles(article_title, user_id, category_id) values('Panaroma',3, 4);
+insert into articles(article_title, user_id, category_id) values('5-G Technology',3, 5);
+insert into articles(article_title, user_id, category_id) values('Smart City',1, 6);
+select * from articles;
+
++----+----------------+---------+-------------+
+| id | article_title  | user_id | category_id |
++----+----------------+---------+-------------+
+|  1 | Climate        |       1 |           1 |
+|  2 | Roadways       |       2 |           2 |
+|  3 | Plantation     |       3 |           9 |
+|  4 | GDP            |       4 |           7 |
+|  5 | Warehouse      |       5 |           7 |
+|  6 | Green bonds    |       6 |           3 |
+|  7 | Panaroma       |       3 |           4 |
+|  8 | 5-G Technology |       3 |           5 |
+|  9 | Smart City     |       1 |           6 |
++----+----------------+---------+-------------+
+
+----------------CREATE TABLE COMMENTS-------------------------------------------
+
+create table comments(
+id smallint not null auto_increment,
+comment_title text not null,
+article_id smallint not null,
+user_id smallint not null,
+primary key(id),
+foreign key(user_id) references user(id),
+foreign key(article_id) references articles(id)
+);
+insert into comments(comment_title, article_id, user_id) values('comment_title 1', 2, 1);
+insert into comments(comment_title, article_id, user_id)  values('comment_title 2',1, 2 );
+insert into comments(comment_title, article_id, user_id) values('comment_title 3',3, 3);
+insert into comments(comment_title, article_id, user_id) values('comment_title 4',5, 5);
+insert into comments(comment_title, article_id, user_id) values('comment_title 5',5, 3);
+insert into comments(comment_title, article_id, user_id) values('comment_title 6',6, 3);
+insert into comments(comment_title, article_id, user_id) values('comment_title 7',7, 4);
+insert into comments(comment_title, article_id, user_id) values('comment_title 8',8, 4);
+insert into comments(comment_title, article_id, user_id) values('comment_title 9',8, 6);
+insert into comments(comment_title, article_id, user_id) values('comment_title 10',7, 1);
+select * from comments;
+
++----+------------------+------------+---------+
+| id | comment_title    | article_id | user_id |
++----+------------------+------------+---------+
+|  1 | comment_title 1  |          2 |       1 |
+|  2 | comment_title 2  |          1 |       2 |
+|  3 | comment_title 3  |          3 |       3 |
+|  4 | comment_title 4  |          5 |       5 |
+|  5 | comment_title 5  |          5 |       3 |
+|  6 | comment_title 6  |          6 |       3 |
+|  7 | comment_title 7  |          7 |       4 |
+|  8 | comment_title 8  |          8 |       4 |
+|  9 | comment_title 9  |          8 |       6 |
+| 10 | comment_title 10 |          7 |       1 |
++----+------------------+------------+---------+
