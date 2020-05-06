@@ -22,13 +22,13 @@ Q2) select all articles whose author's name is user3 (Do this exercise using var
 Select a.article_title as article_name, u.author_name from articles as a 
 join user as u on u.id = a.user_id && u.author_name = 'user3'; 
 
-+--------------------------+
-article_name	author_name
-Plantation	    user3
-Panaroma	      user3
-5-G Technology	user3
-+--------------------------+
-
++----------------+-------------+
+| article_name   | author_name |
++----------------+-------------+
+| Plantation     | user3       |
+| Panaroma       | user3       |
+| 5-G Technology | user3       |
++----------------+-------------+
 
 2.2) USING VARIABLE
 
@@ -36,13 +36,13 @@ set @var1 = 'user3';
 Select a.article_title as article_name, u.author_name from articles as a 
 join user as u on u.id = a.user_id && u.author_name = @var1;
 
-
-+--------------------------+
-article_name	author_name
-Plantation	    user3
-Panaroma	      user3
-5-G Technology	user3
-+--------------------------+
++----------------+-------------+
+| article_name   | author_name |
++----------------+-------------+
+| Plantation     | user3       |
+| Panaroma       | user3       |
+| 5-G Technology | user3       |
++----------------+-------------+
 
 Q3) For all the articles being selected above, select all the articles and also the comments associated with those articles in a single query (Do this using subquery also)
 
@@ -56,16 +56,15 @@ from
 join comments as c on c.article_id = a.id
 join user as u on u.id = a.user_id && u.author_name = 'user3')tbl1;
 
-
-+-------------------------------------+
-article_title	 author_name 	comments_name
-Plantation	    user3	       comment_title 3
-Panaroma	      user3        comment_title 7
-Panaroma	      user3 	     comment_title 10
-5-G Technology	user3	       comment_title 8
-5-G Technology	user3	       comment_title 9
-+----------------------------------------+
-
++----------------+-------------+------------------+
+| article_title  | author_name | comments_name    |
++----------------+-------------+------------------+
+| Plantation     | user3       | comment_title 3  |
+| Panaroma       | user3       | comment_title 7  |
+| Panaroma       | user3       | comment_title 10 |
+| 5-G Technology | user3       | comment_title 8  |
+| 5-G Technology | user3       | comment_title 9  |
++----------------+-------------+------------------+
 
 3.2) WITHOUT A NESTED QUERY
 
@@ -73,14 +72,15 @@ Select  a.article_title, u.author_name, c.comment_title as comments_name from ar
 join comments as c on c.article_id = a.id
 join user as u on u.id = a.user_id && u.author_name = 'user3';
 
-+-------------------------------------+
-article_title	 author_name 	comments_name
-Plantation	    user3	       comment_title 3
-Panaroma	      user3        comment_title 7
-Panaroma	      user3 	     comment_title 10
-5-G Technology	user3	       comment_title 8
-5-G Technology	user3	       comment_title 9
-+----------------------------------------+
++----------------+-------------+------------------+
+| article_title  | author_name | comments_name    |
++----------------+-------------+------------------+
+| Plantation     | user3       | comment_title 3  |
+| Panaroma       | user3       | comment_title 7  |
+| Panaroma       | user3       | comment_title 10 |
+| 5-G Technology | user3       | comment_title 8  |
+| 5-G Technology | user3       | comment_title 9  |
++----------------+-------------+------------------+
 
 Q4 Write a query to select all articles which do not have any comments (Do using subquery also)
 
@@ -123,13 +123,13 @@ left join comments as c on a.id = c.article_id
 group by a.id 
 order by commentCount desc limit 3;
 
-
-+-------------+------------+------------------------+
-author_name	type	article_title	commentCount
-user3	       user	 Panaroma	       2
-user3	       user	 5-G Technology	 2
-user5        admin  Warehouse      2
-+-------------+------------+------------------------+
++-------------+-------+----------------+--------------+
+| author_name | type  | article_title  | commentCount |
++-------------+-------+----------------+--------------+
+| user5       | admin | Warehouse      |            2 |
+| user3       | user  | Panaroma       |            2 |
+| user3       | user  | 5-G Technology |            2 |
++-------------+-------+----------------+--------------+
 
 6 Write a query to select article which does not have more than one comment by the same user ( do this using left join and group by )
 
@@ -139,14 +139,15 @@ left join comments as c on a.id = c.article_id
 group by a.id
 order by commentCount limit 6;
 
-
-+-------------+------------+--------------+
-author_name	article_title	commentCount
-user1	          Smart City	  0
-user4	          GDP	          0
-user1	          Climate	      1
-user6	          Green bonds	  1  
-user2	          Roadways	    1
-user3 	        Plantation	  1
-+-------------+------------+--------------+
++-------------+---------------+--------------+
+| author_name | article_title | commentCount |
++-------------+---------------+--------------+
+| user1       | Smart City    |            0 |
+| user4       | GDP           |            0 |
+| user6       | Green bonds   |            1 |
+| user1       | Climate       |            1 |
+| user2       | Roadways      |            1 |
+| user3       | Plantation    |            1 |
++-------------+---------------+--------------+
+6 rows in set (0.00 sec)
 -------------------------------------------------------------END-----------------------------------------------------------------------
