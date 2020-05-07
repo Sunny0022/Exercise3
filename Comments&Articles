@@ -9,7 +9,7 @@ Q1) manage(create, update, delete) categories, articles, comments, and users
 
 
 Structure : Create_Tables file
-DUMP  :  DUMPbiography.sql
+DUMP  :  DUMPbiography.sql 
 
 
 
