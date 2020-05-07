@@ -20,28 +20,40 @@ Q2) select all articles whose author's name is user3 (Do this exercise using var
 2.1) WITHOUT VARIABLE
 
 Select a.article_title as article_name, u.author_name from articles as a 
-join user as u on u.id = a.user_id && u.author_name = 'user3'; 
+left join user as u on u.id = a.user_id && u.author_name = 'user3'; 
 
 +----------------+-------------+
 | article_name   | author_name |
 +----------------+-------------+
+| Climate        | NULL        |
+| Roadways       | NULL        |
 | Plantation     | user3       |
+| GDP            | NULL        |
+| Warehouse      | NULL        |
+| Green bonds    | NULL        |
 | Panaroma       | user3       |
 | 5-G Technology | user3       |
+| Smart City     | NULL        |
 +----------------+-------------+
 
 2.2) USING VARIABLE
 
 set @var1 = 'user3';
 Select a.article_title as article_name, u.author_name from articles as a 
-join user as u on u.id = a.user_id && u.author_name = @var1;
+left join user as u on u.id = a.user_id && u.author_name = @var1;
 
 +----------------+-------------+
 | article_name   | author_name |
 +----------------+-------------+
+| Climate        | NULL        |
+| Roadways       | NULL        |
 | Plantation     | user3       |
+| GDP            | NULL        |
+| Warehouse      | NULL        |
+| Green bonds    | NULL        |
 | Panaroma       | user3       |
 | 5-G Technology | user3       |
+| Smart City     | NULL        |
 +----------------+-------------+
 
 Q3) For all the articles being selected above, select all the articles and also the comments associated with those articles in a single query (Do this using subquery also)
@@ -53,33 +65,47 @@ Q3) For all the articles being selected above, select all the articles and also 
 Select  tbl1.article_title, tbl1.author_name, tbl1.comment_title as comments_name 
 from
 (select a.article_title, u.author_name, c.comment_title from articles as a
-join comments as c on c.article_id = a.id
-join user as u on u.id = a.user_id && u.author_name = 'user3')tbl1;
+left join comments as c on c.article_id = a.id
+left join user as u on u.id = a.user_id && u.author_name = 'user3')tbl1;
 
 +----------------+-------------+------------------+
 | article_title  | author_name | comments_name    |
 +----------------+-------------+------------------+
+| Climate        | NULL        | comment_title 2  |
+| Roadways       | NULL        | comment_title 1  |
 | Plantation     | user3       | comment_title 3  |
+| GDP            | NULL        | NULL             |
+| Warehouse      | NULL        | comment_title 4  |
+| Warehouse      | NULL        | comment_title 5  |
+| Green bonds    | NULL        | comment_title 6  |
 | Panaroma       | user3       | comment_title 7  |
 | Panaroma       | user3       | comment_title 10 |
 | 5-G Technology | user3       | comment_title 8  |
 | 5-G Technology | user3       | comment_title 9  |
+| Smart City     | NULL        | NULL             |
 +----------------+-------------+------------------+
 
 3.2) WITHOUT A NESTED QUERY
 
 Select  a.article_title, u.author_name, c.comment_title as comments_name from articles as a
-join comments as c on c.article_id = a.id
-join user as u on u.id = a.user_id && u.author_name = 'user3';
+left join comments as c on c.article_id = a.id
+left join user as u on u.id = a.user_id && u.author_name = 'user3';
 
 +----------------+-------------+------------------+
 | article_title  | author_name | comments_name    |
 +----------------+-------------+------------------+
+| Climate        | NULL        | comment_title 2  |
+| Roadways       | NULL        | comment_title 1  |
 | Plantation     | user3       | comment_title 3  |
+| GDP            | NULL        | NULL             |
+| Warehouse      | NULL        | comment_title 4  |
+| Warehouse      | NULL        | comment_title 5  |
+| Green bonds    | NULL        | comment_title 6  |
 | Panaroma       | user3       | comment_title 7  |
 | Panaroma       | user3       | comment_title 10 |
 | 5-G Technology | user3       | comment_title 8  |
 | 5-G Technology | user3       | comment_title 9  |
+| Smart City     | NULL        | NULL             |
 +----------------+-------------+------------------+
 
 Q4 Write a query to select all articles which do not have any comments (Do using subquery also)
