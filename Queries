@@ -55,15 +55,13 @@ Answers
 
 3.1) USING A NESTED QUERY
 
-
-Select  tbl1.article_title, tbl1.author_name, tbl1.comment_title as comments_name 
-from
+Select tbl1.article_title, tbl1.comment_title, u.author_name from 
 (
-Select  a.article_title, u.author_name, c.comment_title from comments as c
+Select a.user_id, a.article_title, c.comment_title from comments as c
 join articles as a on a.id = c.article_id
-join user as u on u.id = a.user_id where u.author_name = 'user3'
-
-)tbl1;
+)as tbl1
+join user as u on u.id = tbl1.user_id
+where u.author_name = 'user3';
 
 +----------------+-------------+------------------+
 | article_title  | author_name | comments_name    |
