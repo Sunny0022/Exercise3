@@ -21,31 +21,30 @@ Answers
 
 2.1) WITHOUT VARIABLE
 
-Select a.article_title, u.author_name from articles as a 
-join user as u on u.id = a.user_id where u.author_name = 'user3';
+Select u.author_name, u.type, a.article_title from user as u
+left join articles as a on a.user_id = u.id where u.author_name = 'user3';
 
-
-+----------------+-------------+
-| article_name   | author_name |
-+----------------+-------------+
-| Plantation     | user3       |
-| Panaroma       | user3       |
-| 5-G Technology | user3       |
-+----------------+-------------+
++-------------+------+----------------+
+| author_name | type | article_title  |
++-------------+------+----------------+
+| user3       | user | Plantation     |
+| user3       | user | Panaroma       |
+| user3       | user | 5-G Technology |
++-------------+------+----------------+
 
 2.2) USING VARIABLE
 
 set @var1 = 'user3';
-Select a.article_title as article_name, u.author_name from articles as a 
-join user as u on u.id = a.user_id where u.author_name = @var1;
+Select u.author_name, u.type, a.article_title from user as u
+left join articles as a on a.user_id = u.id where u.author_name = @var1;
 
-+----------------+-------------+
-| article_name   | author_name |
-+----------------+-------------+
-| Plantation     | user3       |
-| Panaroma       | user3       |
-| 5-G Technology | user3       |
-+----------------+-------------+
++-------------+------+----------------+
+| author_name | type | article_title  |
++-------------+------+----------------+
+| user3       | user | Plantation     |
+| user3       | user | Panaroma       |
+| user3       | user | 5-G Technology |
++-------------+------+----------------+
 
 Q3) For all the articles being selected above, select all the articles and also the comments associated with those
 articles in a single query (Do this using subquery also)
@@ -55,39 +54,33 @@ Answers
 
 3.1) USING A NESTED QUERY
 
-Select tbl1.article_title, tbl1.comment_title, u.author_name from 
-(
-Select a.user_id, a.article_title, c.comment_title from comments as c
-join articles as a on a.id = c.article_id
-)as tbl1
-join user as u on u.id = tbl1.user_id
-where u.author_name = 'user3';
 
-+----------------+-------------+------------------+
-| article_title  | author_name | comments_name    |
-+----------------+-------------+------------------+
-| Plantation     | user3       | comment_title 3  |
-| Panaroma       | user3       | comment_title 7  |
-| Panaroma       | user3       | comment_title 10 |
-| 5-G Technology | user3       | comment_title 8  |
-| 5-G Technology | user3       | comment_title 9  |
-+----------------+-------------+------------------+
+
+
+
++----------------+----------------------------------+
+| article_title  | comments_name                    |
++----------------+----------------------------------+
+| 5-G Technology | comment_title 8,comment_title 9  |
+| Panaroma       | comment_title 7,comment_title 10 |
+| Plantation     | comment_title 3                  |
++----------------+----------------------------------+
 
 3.2) WITHOUT A NESTED QUERY
 
-Select  a.article_title, u.author_name, c.comment_title as comments_name from comments as c
-join articles as a on a.id = c.article_id
-join user as u on u.id = a.user_id where u.author_name = 'user3';
+Select a.article_title, group_concat(c.comment_title) as comment_name from user as u
+left join articles as a on a.user_id = u.id
+left join comments as c on c.article_id = a.id where u.author_name = 'user3'
+group by a.article_title;
 
-+----------------+-------------+------------------+
-| article_title  | author_name | comments_name    |
-+----------------+-------------+------------------+
-| Plantation     | user3       | comment_title 3  |
-| Panaroma       | user3       | comment_title 7  |
-| Panaroma       | user3       | comment_title 10 |
-| 5-G Technology | user3       | comment_title 8  |
-| 5-G Technology | user3       | comment_title 9  |
-+----------------+-------------+------------------+
++----------------+----------------------------------+
+| article_title  | comments_name                    |
++----------------+----------------------------------+
+| 5-G Technology | comment_title 8,comment_title 9  |
+| Panaroma       | comment_title 7,comment_title 10 |
+| Plantation     | comment_title 3                  |
++----------------+----------------------------------+
+
   
 Q4 Write a query to select all articles which do not have any comments (Do using subquery also)
 
