@@ -21,30 +21,30 @@ Answers
 
 2.1) WITHOUT VARIABLE
 
-Select u.author_name, u.type, a.article_title from user as u
-left join articles as a on a.user_id = u.id where u.author_name = 'user3';
+Select * from articles as a
+join user as u on u.id = a.user_id where u.author_name = 'user3';
 
-+-------------+------+----------------+
-| author_name | type | article_title  |
-+-------------+------+----------------+
-| user3       | user | Plantation     |
-| user3       | user | Panaroma       |
-| user3       | user | 5-G Technology |
-+-------------+------+----------------+
++----+----------------+---------+-------------+----+-------------+------+
+| id | article_title  | user_id | category_id | id | author_name | type |
++----+----------------+---------+-------------+----+-------------+------+
+|  3 | Plantation     |       3 |           9 |  3 | user3       | user |
+|  7 | Panaroma       |       3 |           4 |  3 | user3       | user |
+|  8 | 5-G Technology |       3 |           5 |  3 | user3       | user |
++----+----------------+---------+-------------+----+-------------+------+
 
 2.2) USING VARIABLE
 
 set @var1 = 'user3';
-Select u.author_name, u.type, a.article_title from user as u
-left join articles as a on a.user_id = u.id where u.author_name = @var1;
+Select * from articles as a
+join user as u on u.id = a.user_id where u.author_name = @var1;
 
-+-------------+------+----------------+
-| author_name | type | article_title  |
-+-------------+------+----------------+
-| user3       | user | Plantation     |
-| user3       | user | Panaroma       |
-| user3       | user | 5-G Technology |
-+-------------+------+----------------+
++----+----------------+---------+-------------+----+-------------+------+
+| id | article_title  | user_id | category_id | id | author_name | type |
++----+----------------+---------+-------------+----+-------------+------+
+|  3 | Plantation     |       3 |           9 |  3 | user3       | user |
+|  7 | Panaroma       |       3 |           4 |  3 | user3       | user |
+|  8 | 5-G Technology |       3 |           5 |  3 | user3       | user |
++----+----------------+---------+-------------+----+-------------+------+
 
 Q3) For all the articles being selected above, select all the articles and also the comments associated with those
 articles in a single query (Do this using subquery also)
