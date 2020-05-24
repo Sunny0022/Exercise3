@@ -114,6 +114,7 @@ insert into comments(comment_title, article_id) values('comment_title 7',7);
 insert into comments(comment_title, article_id) values('comment_title 8',8);
 insert into comments(comment_title, article_id) values('comment_title 9',8);
 insert into comments(comment_title, article_id) values('comment_title 10',7);
+insert into comments(comment_title, article_id) values('comment_title 11',7);
 select * from comments;
 
 +----+------------------+------------+
@@ -129,4 +130,5 @@ select * from comments;
 |  8 | comment_title 8  |          8 |
 |  9 | comment_title 9  |          8 |
 | 10 | comment_title 10 |          7 |
+| 11 | comment_title 11 |          7 |
 +----+------------------+------------+
