@@ -68,9 +68,9 @@ Answers
 
 3.2) WITHOUT A NESTED QUERY
 
-Select a.article_title, group_concat(c.comment_title) as comment_name from user as u
-left join articles as a on a.user_id = u.id
-left join comments as c on c.article_id = a.id where u.author_name = 'user3'
+Select a.article_title, group_concat(c.comment_title) as comment_name from articles as a 
+left join comments as c on c.article_id = a.id
+left join user as u on u.id = a.user_id where u.author_name = 'user3'
 group by a.article_title;
 
 +----------------+----------------------------------+
@@ -87,12 +87,7 @@ Q4 Write a query to select all articles which do not have any comments (Do using
 
 4.1)  USING A NESTED QUERY
 
-select tbl1.article_title, tbl1.comment_title 
-from
-( 
-select a.article_title, c.comment_title from articles as a
-left Join comments as c on c.article_id = a.id where c.comment_title is null
-)tbl1;
+
 
 +----------------+----------------+
 | article_title  | comments_title |
@@ -115,27 +110,27 @@ left Join comments as c on c.article_id = a.id where c.comment_title is null;
 
 5 Write a query to select article which has maximum comments
 
-select u.author_name, u.type, a.article_title, count(c.id)  as commentCount from articles as a
-join user as u on u.id = a.user_id
+select author, article_name, max(commentCount) as maximum_comments from
+(select u.author_name as author, a.article_title as article_name, count(c.id) as commentCount from articles as a
+left join user as u on u.id = a.user_id
 left join comments as c on a.id = c.article_id
-group by a.id
-having commentCount in (2);
+group by a.article_title
+order by commentCount desc)
+as counts;
 
-+-------------+-------+----------------+--------------+
-| author_name | type  | article_title  | commentCount |
-+-------------+-------+----------------+--------------+
-| user5       | admin | Warehouse      |            2 |
-| user3       | user  | Panaroma       |            2 |
-| user3       | user  | 5-G Technology |            2 |
-+-------------+-------+----------------+--------------+
++-------------+-------+----------------+----------+
+| author      | article_name  | maximum_comments  |
++-------------+-------+----------------+----------+
+| user3       | Panaroma      |        3          |
++-------------+-------+----------------+----------+
 
 6 Write a query to select article which does not have more than one comment by the same user ( do this using left join and group by )
 
 select u.author_name, a.article_title, count(c.id)  as commentCount from articles as a
-join user as u on u.id = a.user_id
+left join user as u on u.id = a.user_id
 left join comments as c on a.id = c.article_id
 group by a.id
-having commentCount in (0,1);
+having commentCount <= 1 ;
 
 +-------------+---------------+--------------+
 | author_name | article_title | commentCount |
