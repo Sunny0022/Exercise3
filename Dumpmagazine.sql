@@ -43,7 +43,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,'comment_title 1',2),(2,'comment_title 2',1),(3,'comment_title 3',3),(4,'comment_title 4',5),(5,'comment_title 5',5),(6,'comment_title 6',6),(7,'comment_title 7',7),(8,'comment_title 8',8),(9,'comment_title 9',8),(10,'comment_title 10',7);
+INSERT INTO `comments` VALUES (1,'comment_title 1',2),(2,'comment_title 2',1),(3,'comment_title 3',3),(4,'comment_title 4',5),(5,'comment_title 5',5),(6,'comment_title 6',6),(7,'comment_title 7',7),(8,'comment_title 8',8),(9,'comment_title 9',8),(10,'comment_title 10',7),(11,'comment_title 11',7);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
