@@ -72,8 +72,9 @@ group by a.article_title;
 3.2) WITHOUT A NESTED QUERY
 
 Select a.article_title, group_concat(c.comment_title) as comment_name from articles as a 
-left join comments as c on c.article_id = a.id
-left join user as u on u.id = a.user_id where u.author_name = 'user3'
+left join user as u on u.id = a.user_id
+left join comments as c on c.article_id = a.id 
+where u.author_name = 'user3'
 group by a.article_title;
 
 +----------------+--------------------------------------------------+ 
