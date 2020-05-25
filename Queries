@@ -54,17 +54,20 @@ Answers
 
 3.1) USING A NESTED QUERY
 
+Select a.article_title, group_concat(c.comment_title) as comment_name from articles as a 
+left join (user as u, comments as c) on 
+(u.id = a.user_id and a.id = c.article_id)
+where u.author_name = 'user3'
+group by a.article_title;
 
++----------------+--------------------------------------------------+ 
+| article_title  | comments_name                                    |
++----------------+--------------------------------------------------+
+| 5-G Technology | comment_title 8,comment_title 9                  |
+| Panaroma       | comment_title 7,comment_title 10,comment_title 11|
+| Plantation     | comment_title 3                                  |
++----------------+--------------------------------------------------+
 
-
-
-+----------------+----------------------------------+
-| article_title  | comments_name                    |
-+----------------+----------------------------------+
-| 5-G Technology | comment_title 8,comment_title 9  |
-| Panaroma       | comment_title 7,comment_title 10 |
-| Plantation     | comment_title 3                  |
-+----------------+----------------------------------+
 
 3.2) WITHOUT A NESTED QUERY
 
@@ -73,13 +76,13 @@ left join comments as c on c.article_id = a.id
 left join user as u on u.id = a.user_id where u.author_name = 'user3'
 group by a.article_title;
 
-+----------------+----------------------------------+
-| article_title  | comments_name                    |
-+----------------+----------------------------------+
-| 5-G Technology | comment_title 8,comment_title 9  |
-| Panaroma       | comment_title 7,comment_title 10 |
-| Plantation     | comment_title 3                  |
-+----------------+----------------------------------+
++----------------+--------------------------------------------------+ 
+| article_title  | comments_name                                    |
++----------------+--------------------------------------------------+
+| 5-G Technology | comment_title 8,comment_title 9                  |
+| Panaroma       | comment_title 7,comment_title 10,comment_title 11|
+| Plantation     | comment_title 3                                  |
++----------------+--------------------------------------------------+
 
   
 Q4 Write a query to select all articles which do not have any comments (Do using subquery also)
@@ -87,25 +90,29 @@ Q4 Write a query to select all articles which do not have any comments (Do using
 
 4.1)  USING A NESTED QUERY
 
+select article_title from articles
+where id  not in (select article_id from comments);
 
++----------------+
+| article_title  |
++----------------+
+| GDP            |
+| Smart City     |
++----------------+
 
-+----------------+----------------+
-| article_title  | comments_title |
-+----------------+----------------+
-| GDP            |       Null     |
-| Smart City     |       Null     |
-+----------------+----------------+
 
 4.2)  WITHOUT A NESTED QUERY
 
-select a.article_title, c.comment_title from articles as a
-left Join comments as c on c.article_id = a.id where c.comment_title is null;
-+----------------+----------------+
-| article_title  | comments_title |
-+----------------+----------------+
-| GDP            |       Null     |
-| Smart City     |       Null     |
-+----------------+------------
+select  article_title from articles as a
+left Join comments as c on  a.id = c.article_id 
+where comment_title is null;
+
++----------------+
+| article_title  |
++----------------+
+| GDP            |
+| Smart City     |
++----------------+
 
 
 5 Write a query to select article which has maximum comments
