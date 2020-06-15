@@ -67,9 +67,9 @@ Answers
 
 3.2) WITHOUT A NESTED QUERY
 
-Select a.article_title, group_concat(c.comment_title) as comment_name from articles as a 
-left join (user as u, comments as c) on 
-(u.id = a.user_id and a.id = c.article_id)
+Select a.article_title, group_concat(c.comment_title) as comment_name from articles as a
+join user as u on u.id = a.user_id
+left join comments as c on a.id = c.article_id
 where u.author_name = 'user3'
 group by a.article_title;
 
@@ -87,30 +87,29 @@ Q4 Write a query to select all articles which do not have any comments (Do using
 
 4.1)  USING A NESTED QUERY
 
-select article_title from articles
+select * from articles
 where id  not in (select article_id from comments);
 
-+----------------+
-| article_title  |
-+----------------+
-| GDP            |
-| Smart City     |
-+----------------+
++----+---------------+---------+-------------+
+| id | article_title | user_id | category_id |
++----+---------------+---------+-------------+
+|  4 | GDP           |       4 |           7 |
+|  9 | Smart City    |       1 |           6 |
++----+---------------+---------+-------------+
 
 
 4.2)  WITHOUT A NESTED QUERY
 
-select  article_title from articles as a
+select  a.id, a.article_title, a.user_id, a.category_id from articles as a
 left Join comments as c on  a.id = c.article_id 
 where comment_title is null;
 
-+----------------+
-| article_title  |
-+----------------+
-| GDP            |
-| Smart City     |
-+----------------+
-
++----+---------------+---------+-------------+
+| id | article_title | user_id | category_id |
++----+---------------+---------+-------------+
+|  4 | GDP           |       4 |           7 |
+|  9 | Smart City    |       1 |           6 |
++----+---------------+---------+-------------+
 
 5 Write a query to select article which has maximum comments
 
@@ -131,19 +130,19 @@ as counts;
 6 Write a query to select article which does not have more than one comment by the same user ( do this using left join and group by )
 
 select u.author_name, a.article_title, count(c.id)  as commentCount from articles as a
-left join user as u on u.id = a.user_id
+join user as u on u.id = a.user_id
 left join comments as c on a.id = c.article_id
-group by a.id
+group by a.article_title
 having commentCount <= 1 ;
 
 +-------------+---------------+--------------+
 | author_name | article_title | commentCount |
 +-------------+---------------+--------------+
-| user1       | Smart City    |            0 |
-| user4       | GDP           |            0 |
-| user6       | Green bonds   |            1 |
 | user1       | Climate       |            1 |
 | user2       | Roadways      |            1 |
 | user3       | Plantation    |            1 |
+| user4       | GDP           |            0 |
+| user6       | Green bonds   |            1 |
+| user1       | Smart City    |            0 |
 +-------------+---------------+--------------+
 -------------------------------------------------------------END-----------------------------------------------------------------------
