@@ -54,7 +54,15 @@ Answers
 
 3.1) USING A NESTED QUERY
 
-
+Select a.article_title, group_concat(c.comment_name) from articles as a
+join user as u on u.id = a.user_id 
+left join
+(
+select article_id as sibling, comment_title as comment_name from  comments
+) as c
+On c.sibling = a.id
+where u.author_name = 'user3'
+group by a.article_title;
 
 +----------------+--------------------------------------------------+ 
 | article_title  | comments_name                                    |
@@ -113,12 +121,16 @@ where comment_title is null;
 
 5 Write a query to select article which has maximum comments
 
-select author, article_name, max(commentCount) as maximum_comments from
-(select u.author_name as author, a.article_title as article_name, count(c.id) as commentCount from articles as a
-left join user as u on u.id = a.user_id
+ANSWER
+
+Select author, article_name, max(commentCount) as maximum_comments from
+(
+Select u.author_name as author, a.article_title as article_name, count(c.id)  as commentCount from articles as a
+join user as u on u.id = a.user_id
 left join comments as c on a.id = c.article_id
 group by a.article_title
-order by commentCount desc)
+order by a.article_title
+)
 as counts;
 
 +-------------+-------+----------------+----------+
