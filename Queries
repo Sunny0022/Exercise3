@@ -95,67 +95,66 @@ Q4 Write a query to select all articles which do not have any comments (Do using
 
 4.1)  USING A NESTED QUERY
 
-select * from articles as a
-left join
-(select article_id as my_id, comment_title as comment_name from comments) as c
-on a.id = c.my_id
-where c.comment_name is null;
+select SNO, article_name, comment_name from
+(
+Select a.id as SNO, a.article_title as article_name, c.comment_title as comment_name from articles as a
+left join comments as c
+on a.id = c.article_id
+) as ad
+where ad.comment_name is null;
 
-+----+---------------+---------+-------------+-------+--------------+
-| id | article_title | user_id | category_id | my_id | comment_name |
-+----+---------------+---------+-------------+-------+--------------+
-|  4 | GDP           |       4 |           7 |  NULL | NULL         |
-|  9 | Smart City    |       1 |           6 |  NULL | NULL         |
-+----+---------------+---------+-------------+-------+--------------+
-
++----+---------------+--------------+
+| SNO| article_name  | comment_name |
++----+---------------+--------------+
+|  4 | GDP           |       NUll   |   
+|  9 | Smart City    |       Null   |   
++----+---------------+---------+--- +
 
 4.2)  WITHOUT A NESTED QUERY
 
-select * from articles as a
+select a.id as SNO, a.article_title as article_name, c.comment_title as comment_name
+from articles as a
 left Join comments as c on  a.id = c.article_id 
 where comment_title is null;
 
-+----+---------------+---------+-------------+-------+--------------+
-| id | article_title | user_id | category_id | my_id | comment_name |
-+----+---------------+---------+-------------+-------+--------------+
-|  4 | GDP           |       4 |           7 |  NULL | NULL         |
-|  9 | Smart City    |       1 |           6 |  NULL | NULL         |
-+----+---------------+---------+-------------+-------+--------------+
++----+---------------+--------------+
+| SNO| article_name  | comment_name |
++----+---------------+--------------+
+|  4 | GDP           |       NUll   |   
+|  9 | Smart City    |       Null   |   
++----+---------------+---------+--- +
 
 5 Write a query to select article which has maximum comments
 
-Select author, article_name, max(commentCount) as maximum_comments from
+Select article_name, max(comment_Count) from
 (
-Select u.author_name as author, a.article_title as article_name, count(c.id)  as commentCount from articles as a
-left join user as u on u.id = a.user_id
+Select article_title as article_name, count(c.id) as comment_Count from articles as a
 left join comments as c on a.id = c.article_id
 group by a.article_title
-order by a.article_title
-)
-as counts;
+order by comment_Count desc
+) as counts;
 
-+-------------+-------+----------------+----------+
-| author      | article_name  | maximum_comments  |
-+-------------+-------+----------------+----------+
-| user3       | Panaroma      |        3          |
-+-------------+-------+----------------+----------+
++-------+----------------+--------+
+| article_name| maximum_comments  |
++-------+----------------+--------+
+| Panaroma    |        3          |
++-------------+-------+-----------+
 
 6 Write a query to select article which does not have more than one comment by the same user ( do this using left join and group by )
 
-select u.author_name, a.article_title, count(c.id)  as commentCount from articles as a
-left join user as u on u.id = a.user_id
+select a.article_title, count(c.id)  as commentCount from articles as a
 left join comments as c on a.id = c.article_id
 group by a.article_title
-having commentCount <= 1 ;
+having commentCount <= 1;
 
-+-------------+---------------+--------------+
-| author_name | article_title | commentCount |
-+-------------+---------------+--------------+
-| user1       | Climate       |            1 |
-| user2       | Roadways      |            1 |
-| user3       | Plantation    |            1 |
-| user4       | GDP           |            0 |
-| user6       | Green bonds   |            1 |
-| user1       | Smart City    |            0 |
-+-------------+---------------+--------------+
++---------------+--------------+
+| article_title | commentCount |
++---------------+--------------+
+| Climate       |            1 |
+| Roadways      |            1 |
+| Plantation    |            1 |
+| GDP           |            0 |
+| Green bonds   |            1 |
+| Smart City    |            0 |
++---------------+--------------+
 -------------------------------------------------------------END-----------------------------------------------------------------------
