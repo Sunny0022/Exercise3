@@ -55,16 +55,14 @@ Answers
 3.1) USING A NESTED QUERY
 
 Select a.article_title, group_concat(c.comment_name) as comment_name from articles as a
-join (select id as my_id1 from user where author_name = 'user3') as u
-on a.user_id = u.my_id1
+join 
+(Select id as my_id1 from user where author_name = 'user3') as u
+On a.user_id = u.my_id1
 left join
-(select article_id as my_id2, comment_title as comment_name from  comments
-) as c
+(Select article_id as my_id2, comment_title as comment_name from  comments) as c
 On c.my_id2 = a.id
 group by a.id;
 
-+----------------+--------------------------------------------------+ 
-| article_title  | comments_name                                    |
 +----------------+---------------------------------------------------+
 | article_title  | comment_name                                      |
 +----------------+---------------------------------------------------+
@@ -72,7 +70,6 @@ group by a.id;
 | Panaroma       | comment_title 7,comment_title 10,comment_title 11 |
 | 5-G Technology | comment_title 8,comment_title 9                   |
 +----------------+---------------------------------------------------+
-
 
 
 3.2) WITHOUT A NESTED QUERY
