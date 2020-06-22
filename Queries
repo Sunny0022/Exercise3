@@ -60,7 +60,7 @@ join
 On a.user_id = u.my_id1
 left join
 (Select article_id as my_id2, comment_title as comment_name from  comments) as c
-On c.my_id2 = a.id
+On  a.id = c.my_id2
 group by a.id;
 
 +----------------+---------------------------------------------------+
@@ -131,7 +131,7 @@ order by comment_Count desc
 ) as counts;
 
 +-------+----------------+--------+
-| article_name| maximum_comments  |
+| article_name| max(comment_Count)|
 +-------+----------------+--------+
 | Panaroma    |        3          |
 +-------------+-------+-----------+
